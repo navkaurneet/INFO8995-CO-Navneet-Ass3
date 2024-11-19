@@ -1,15 +1,19 @@
 FROM python:3.9-slim
 
-# Setting the working directory
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the files into the container's /app directory
-COPY webservice.py .
-COPY config.txt .
+# Copy application files into the container
+COPY app.py /app/app.py
+COPY config.txt /app/config.txt  
+# Copy the config file into the container
 
-# Installing requirements
-RUN pip install Flask
+# Install required Python packages
+COPY requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
+# Expose the application's port
 EXPOSE 5000
 
-CMD ["python", "webservice.py"]
+# Define the command to run the application
+CMD ["python", "/app/app.py"]
