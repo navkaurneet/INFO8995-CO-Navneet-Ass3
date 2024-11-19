@@ -1,0 +1,18 @@
+version: '3'
+services:
+  webservice:
+    build:
+      context: ./webservice
+    ports:
+      - "5000:5000"
+    volumes:
+      - "C:/Users/user1/Documents/Navneet/CDevOps/Sem2/ContainerO1/Assignment2/webservice/config.txt:/app/config.txt"  # Mounting local file to the container because it was giving File Not Found error.
+    environment:
+      - CONFIG_PATH=/app/config.txt
+  load_balancer:
+    build:
+      context: ./load_balancer
+    ports:
+      - "8080:80"
+    depends_on:
+      - webservice
