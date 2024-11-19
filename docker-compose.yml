@@ -1,4 +1,5 @@
-version: '3'
+version: '3.9'
+
 services:
   webservice:
     build:
@@ -6,9 +7,18 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - "C:/Users/user1/Documents/Navneet/CDevOps/Sem2/ContainerO1/Assignment2/webservice/config.txt:/app/config.txt"  # Mounting local file to the container because it was giving File Not Found error.
+      - ./webservice/config.txt:/app/config.txt
     environment:
       - CONFIG_PATH=/app/config.txt
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - app_network
+
   load_balancer:
     build:
       context: ./load_balancer
@@ -16,3 +26,15 @@ services:
       - "8080:80"
     depends_on:
       - webservice
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
