@@ -1,26 +1,50 @@
 # INFO8995-CO-Navneet-Ass3
 This is for the assignment 3 
-# Web Service with NGINX Load Balancer
+# Advanced Containers with Docker Compose
 
 ## Overview
-As per the requirements, this project consits of a simple web service (pyhton based) that reads a message from a config file and serves it over HTTP. An NGINX load balancer forwards external traffic to the web service.
+This project demonstrates a prototype solution for exposing an internal web service to external sources via a load balancer.
 
-## Pre-requisite 
-Docker and Docker Compose
+### Components
+1. **Web Service**: A Python-based service that serves a configurable message from a file (`config.txt`).
+2. **Load Balancer**: An NGINX-based service that forwards requests to the web service.
 
-## Setup
+### Features
+- Health checks for both services.
+- Persistent configuration using Docker volumes.
+- Modular and networked container design.
 
-Run the below command in the main project folder
-    "docker-compose up --build"
+## Prerequisites
+- Docker and Docker Compose.
 
-Then we can check and access the web service through the load balancer by going to below link:
-    http://localhost:8080
+## Setup Instructions
+1. Clone the repository and navigate to the project folder.
+2. Build and start the services with:
+    docker-compose up --build
+Access the web service through the load balancer:
+URL: http://localhost:8080
 
+## Best Practices Followed
+Services restart automatically with restart: unless-stopped.
+Health checks to ensure readiness of services.
+Network isolation using a custom Docker network.
+## Stopping the Services
+To stop and remove the containers, run:
 
-## Components
+docker-compose down
 
-- webservice: This is webservice running on python flask which read the message from 'config.txt' file.
-- load_balancer: An NGINX load balancer that forwards external requests to the web service.
+## Directory Structure
 
-- config.txt: This is the custom message displayed by the webserver. This can be changed according to need.
-- Dockerfile: There are two docker file, one for the web server and another is for load balancer.
+project/
+├── docker-compose.yml    # Docker Compose configuration
+├── webservice/           # Web service source code and Dockerfile
+│   ├── Dockerfile
+│   ├── config.txt        # Configuration file for the web service
+│   ├── app.py            # Python application
+│   └── requirements.txt  # Python application requirements
+├── load_balancer/        # NGINX load balancer configuration and Dockerfile
+│   ├── Dockerfile
+│   └── nginx.conf        # NGINX configuration
+    └── wait-for-it.sh    # A script file for wait time before running the service.
+
+The config.txt file in the webservice/ directory can be modified to change the message served by the web service.
